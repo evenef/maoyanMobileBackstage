@@ -68,7 +68,7 @@ import axios from 'axios'
             page:1,
             maxpage:0,
             total:0,
-            eachpage:6,
+            eachpage:5,
             data:[]
           }
       }
@@ -92,12 +92,27 @@ import axios from 'axios'
                 }
                 console.log(data)
 
-        }
-        // toppage(){
-        //     if (this.$data.pages) {
+        },
+        toppage(){
+            console.log(this.$data.pages.curpage)
+            if (this.$data.pages.curpage>1) {
+                this.$data.pages.curpage--;
+                this.gerusers(this.pages.eachpage,this.pages.curpage,)
+            }
+            else{
+                alert("当前已经是第一页了")
+            }
+        },
+        listpage(){
+             if (this.$data.pages.curpage<this.$data.pages.maxpage) {
+                this.$data.pages.curpage++;
+                this.gerusers(this.pages.eachpage,this.pages.curpage,)
                 
-        //     }
-        // }
+            }
+            else{
+                alert("已经是最后一页了")
+            }
+        }
     }
     }
 </script>
