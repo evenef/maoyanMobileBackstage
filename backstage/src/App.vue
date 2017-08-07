@@ -10,10 +10,10 @@
 	<el-row>
 		<el-col :span="6">
 			<el-col :span="24">
-				<el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo">
+				<el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo" router >
 				<el-menu-item-group title="用户">
 					<el-menu-item index="1"><i class="el-icon-plus"></i>新增用户</el-menu-item>
-					<el-menu-item index="2"><i class="el-icon-star-on"></i>用户列表</el-menu-item>
+					<el-menu-item index="users"><i class="el-icon-star-on"></i>用户列表</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="电影">
 					<el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item>
@@ -31,13 +31,18 @@
 				</el-menu>
 			</el-col>
 		</el-col>
-		<el-col :span="18"><router-view></router-view></el-col>
+		<el-col :span="18">
+			<div class="content">
+				<router-view></router-view>
+			</div>
+		</el-col>
 	 </el-row>
 	</div>
 </template>
 
 <script>
 	import Setup from "./setup/setup.vue"
+	import Users from "./users/users.vue"
 
 	export default {
 		name: 'app',
@@ -53,7 +58,8 @@
 		},
 		//注册组件
 		components: {
-			Setup
+			Setup,
+			Users
 		}
 	}
 </script>
