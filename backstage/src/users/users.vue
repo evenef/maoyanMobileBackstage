@@ -25,7 +25,7 @@
 			</div>
 		</el-dialog>
     <!--编辑界面-->
-    <el-dialog title="新增" v-model="editFormVisible" :close-on-click-modal="false" size="tiny">
+    <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" size="tiny">
 			<el-form :model="editForm" label-width="80px" :rules="addFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="acc">
 					<el-input v-model="editForm.acc" auto-complete="off" style="width:400px;"></el-input>
@@ -73,18 +73,18 @@
       <el-table-column
         prop="acc"
         label="姓名"
-        width="100"
+        width="160"
         >
       </el-table-column>
       <el-table-column
         prop="pwd"
         label="密码"
-        width="100">
+        width="140">
       </el-table-column>
       <el-table-column
         prop="email"
         label="邮箱"
-        width="180">
+        width="240">
       </el-table-column>
       <el-table-column
         prop="tel"
@@ -98,9 +98,8 @@
 	  <el-table-column
       fixed="right"
       label="操作"
-      width="220"
-      align="center"
-      >
+      width="300"
+      align="center">
       <template scope="scope">
        
         <el-button type="text" size="danger" style="width:80px;" @click="deluser(scope.$index,scope.row)">删除</el-button>
@@ -138,6 +137,10 @@ import axios from 'axios'
     export default{
         data () {
       return {
+        filters:{
+          acc:""
+        },
+        
           pages:{
             page:1,
             maxpage:0,
@@ -303,8 +306,16 @@ import axios from 'axios'
         },
         //查询数据
         chaxunuser(){
-         
-          
+          console.log(para)
+         let para={
+          //  page:this.page,
+           acc:this.filters.acc
+         };
+         chaxun(para).then((res)=>{
+           console.log(res)
+           this.pages.rows=res.data
+         })
+       
           
         },
 
@@ -322,7 +333,11 @@ import axios from 'axios'
     }
     }
 </script>
+<<<<<<< HEAD
+<style>
+=======
 <style scope>
+>>>>>>> 框架搭建
 *{
    
 }
