@@ -99,7 +99,8 @@
       fixed="right"
       label="操作"
       width="220"
-      align="center">
+      align="center"
+      >
       <template scope="scope">
        
         <el-button type="text" size="danger" style="width:80px;" @click="deluser(scope.$index,scope.row)">删除</el-button>
@@ -321,11 +322,7 @@ import axios from 'axios'
     }
     }
 </script>
-<<<<<<< HEAD
-<style>
-=======
 <style scope>
->>>>>>> 框架搭建
 *{
    
 }

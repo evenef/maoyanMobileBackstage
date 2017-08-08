@@ -10,12 +10,12 @@ Vue.use(Router)
 export default new Router({
     //路由配置
     routes: [{
-        path: "/1",
-        name: "setup",
-        component: setup
-    }, {
-        path: "/users",
+        path: "/users",//用户
         name: "users",
         component: users
+    }, {
+        path: "/setup",//排片
+        name: "setup",
+        component: setup
     }]
 })

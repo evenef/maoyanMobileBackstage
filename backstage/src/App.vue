@@ -8,12 +8,11 @@
 		</el-col>
 	</el-row>
 	<el-row>
-		<el-col :span="6">
+		<el-col :span="4">
 			<el-col :span="24">
 				<el-menu mode="vertical" default-active="1" class="el-menu-vertical-demo" router >
 				<el-menu-item-group title="用户">
-					<el-menu-item index="1"><i class="el-icon-plus"></i>新增用户</el-menu-item>
-					<el-menu-item index="users"><i class="el-icon-star-on"></i>用户列表</el-menu-item>
+					<el-menu-item index="users"><i class="el-icon-star-on"></i>用户管理</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="电影">
 					<el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item>
@@ -26,12 +25,12 @@
 				</el-menu-item-group>
 				<el-menu-item-group title="排片">
 					<el-menu-item index="8"><i class="el-icon-plus"></i>新增排片</el-menu-item>
-					<el-menu-item index="9"><i class="el-icon-date"></i>排片列表</el-menu-item>
+					<el-menu-item index="setup"><i class="el-icon-date"></i>排片列表</el-menu-item>
 				</el-menu-item-group>
 				</el-menu>
 			</el-col>
 		</el-col>
-		<el-col :span="18">
+		<el-col :span="20">
 			<div class="content">
 				<router-view></router-view>
 			</div>
