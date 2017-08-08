@@ -24,7 +24,7 @@
 					<el-menu-item index="7"><i class="el-icon-menu"></i>影院列表</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="排片">
-					<el-menu-item index="8"><i class="el-icon-plus"></i>新增排片</el-menu-item>
+					<el-menu-item index="setupAdd"><i class="el-icon-plus"></i>新增排片</el-menu-item>
 					<el-menu-item index="setup"><i class="el-icon-date"></i>排片列表</el-menu-item>
 				</el-menu-item-group>
 				</el-menu>
@@ -41,6 +41,7 @@
 
 <script>
 	import Setup from "./setup/setup.vue"
+	import SetupAdd from "./setup/setup-add.vue"
 	import Users from "./users/users.vue"
 
 	export default {
@@ -58,7 +59,8 @@
 		//注册组件
 		components: {
 			Setup,
-			Users
+			Users,
+			SetupAdd
 		}
 	}
 </script>

@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //引入组件
-import setup from "../setup/setup.vue"
 import users from "../users/users.vue"
+import setup from "../setup/setup.vue"
+import setupAdd from "../setup/setup-add.vue"
 
 Vue.use(Router)
 
@@ -17,5 +18,9 @@ export default new Router({
         path: "/setup",//排片
         name: "setup",
         component: setup
+    }, {
+        path: "/setupAdd",//新增排片
+        name: "setup-add",
+        component: setupAdd
     }]
 })
