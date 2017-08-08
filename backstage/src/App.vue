@@ -17,7 +17,7 @@
 				<el-menu-item-group title="电影">
 					<el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item>
 					<el-menu-item index="4"><i class="el-icon-document"></i>电影列表</el-menu-item>
-					<el-menu-item index="5"><i class="el-icon-setting"></i>上映状态</el-menu-item>
+					<el-menu-item index="Shangying"><i class="el-icon-setting"></i>上映状态</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="影院">
 					<el-menu-item index="6"><i class="el-icon-plus"></i>新增影院</el-menu-item>
@@ -42,6 +42,7 @@
 <script>
 	import Setup from "./setup/setup.vue"
 	import Users from "./users/users.vue"
+	import Shangying from "./shangying/shangying.vue"
 
 	export default {
 		name: 'app',
@@ -58,7 +59,8 @@
 		//注册组件
 		components: {
 			Setup,
-			Users
+			Users,
+			Shangying
 		}
 	}
 </script>

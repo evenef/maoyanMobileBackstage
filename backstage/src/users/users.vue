@@ -1,7 +1,7 @@
 <template>
 <div>
   <!--新增界面-->
-<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" size="tiny">
+<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" size="tiny" v-loading="tijiaoloading">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名" prop="acc">
 					<el-input v-model="addForm.acc" auto-complete="off" style="width:400px;"></el-input>
@@ -21,11 +21,11 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+				<el-button type="primary" @click.native="addSubmit" >提交</el-button>
 			</div>
 		</el-dialog>
     <!--编辑界面-->
-    <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" size="tiny">
+    <el-dialog title="编辑" v-model="editFormVisible"  size="tiny">
 			<el-form :model="editForm" label-width="80px" :rules="addFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="acc">
 					<el-input v-model="editForm.acc" auto-complete="off" style="width:400px;"></el-input>
@@ -55,16 +55,18 @@
     margin-top:2px;" class="ipt"></input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="chaxunuser">查询</el-button>
+					<el-button type="primary" @click="chaxunuser" icon="search"
+          v-loading.fullscreen.lock="cditloging">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button type="primary" @click="handleAdd" icon="plus">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
  <el-table  :data="this.pages.rows"
-      
+       v-loading="tabloading"
       style="width: 100%"
+     
       >
       <el-table-column
       type="selection"
@@ -101,9 +103,13 @@
       width="300"
       align="center">
       <template scope="scope">
-       
-        <el-button type="text" size="danger" style="width:80px;" @click="deluser(scope.$index,scope.row)">删除</el-button>
-        <el-button type="text" size="danger" style="width:80px;" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+       <el-button icon="edit" type="text" size="success" style="width:60px;" 
+        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button  type="text" size="danger" style="width:60px;background-color: red; height: 
+        32px;margin-top:5px; margin-left:20px;
+    color: white;"
+         @click="deluser(scope.$index,scope.row)" v-loading="tabloading">删除</el-button>
+        
       </template>
     </el-table-column>
     </el-table>
@@ -114,7 +120,7 @@
     <el-pagination
       @size-change="toppage"
       @current-change="listpage"
-      :current-page="currentPage4"
+      
       :page-sizes="[10, 20, 30, 40]"
       :page-size="100"
       layout="total, sizes, prev, pager, next, jumper"
@@ -166,8 +172,10 @@ import axios from 'axios'
 					bth: '',
 					tel: ''
 				},
-        addFormVisible:false,
-        addLoading: false,//是否显示添加页面
+        addFormVisible:false,//是否显示添加页面
+        cditloging: false,
+        tabloading:true,
+        tijiaoloading:false,
         editFormVisible:false, //是否显示编辑页面
         addFormRules: {
 					acc: [
@@ -178,6 +186,11 @@ import axios from 'axios'
     },
     created(){
             this.gerusers();
+            setTimeout(()=>{
+              this.tabloading=false;
+            },1000)
+              
+            
             
             
 		},
@@ -199,6 +212,7 @@ import axios from 'axios'
                     eachpage:data.eachpage,
                     //  listLoading:false,
                 }
+                
                
                  
                 
@@ -219,7 +233,7 @@ import axios from 'axios'
         listpage(){
              if (this.$data.pages.curpage<this.$data.pages.maxpage) {
                 this.$data.pages.curpage++;
-                this.gerusers(this.pages.eachpage,this.pages.curpage,)
+                this.gerusers(this.pages.eachpage,this.pages.curpage)
                 
             }
             else if(this.$data.pages.curpage=this.$data.pages.maxpage){
@@ -237,14 +251,23 @@ import axios from 'axios'
                 this.listLoading=true;
                 console.log(row._id)
                 let usersid={_id:row._id}
-                
-               removeUser(usersid).then((res)=>{
-                    
-                   this.$message({
+                this.tabloading=true;
+                setTimeout(()=>{
+                   this.tabloading=false;
+                    this.$message({
                        type:"success",
                        message:"删除成功"
                        
                    });
+
+                },1000)
+               removeUser(usersid).then((res)=>{
+                    
+                  //  this.$message({
+                  //      type:"success",
+                  //      message:"删除成功"
+                       
+                  //  });
                   
                    this.gerusers()
                 }).catch(()=>{
@@ -254,18 +277,27 @@ import axios from 'axios'
         },
         //添加数据方法
         addSubmit(){
+         
+          this.tijiaoloading=true;
           this.$refs.addForm.validate((valid)=>{
             if (valid) {
               this.$confirm("确认提交吗？","提示",{}).then(()=>{
-                this.addLoading=true;
+                
                 let para=Object.assign({},this.addForm);
-                // para.bth = (!para.bth || para.bth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                useradd(para).then((res)=>{
-                  this.addLoading=false;
+                setTimeout(()=>{
+                  this.tijiaoloading=false;
                   this.$message({
                     type: 'success',
                     message:"提交成功"
                   });
+                },1000)
+                // para.bth = (!para.bth || para.bth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+                useradd(para).then((res)=>{
+                  this.addLoading=false;
+                  // this.$message({
+                  //   type: 'success',
+                  //   message:"提交成功"
+                  // });
                   this.$refs['addForm'].resetFields();
                   this.addFormVisible = false;
                   this.gerusers();
@@ -282,6 +314,7 @@ import axios from 'axios'
               this.$confirm("确认提交吗？","提示",{}).then(()=>{
                 this.addLoading=true;
                 let para=Object.assign({},this.editForm);
+                console.log(para);
                 // para.bth = (!para.bth || para.bth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                 editupdate(para).then((res)=>{
                   this.addLoading=false;
@@ -306,6 +339,10 @@ import axios from 'axios'
         },
         //查询数据
         chaxunuser(){
+          this.cditloging=true;
+          setTimeout(() => {
+          this.cditloging = false;
+        }, 500);
           console.log(para)
          let para={
           //  page:this.page,

@@ -4,6 +4,7 @@ import Router from 'vue-router'
 //引入组件
 import setup from "../setup/setup.vue"
 import users from "../users/users.vue"
+import shangying from '../shangying/shangying.vue'
 
 Vue.use(Router)
 
@@ -17,5 +18,11 @@ export default new Router({
         path: "/setup",//排片
         name: "setup",
         component: setup
-    }]
+    },
+    {
+        path:"/Shangying",
+        name:"Shangying",
+        component: shangying
+    }
+]
 })
