@@ -5,93 +5,34 @@
 	    stripe
 	    style="width: 100%">
 	    <el-table-column
-	      prop="nameCN"
-	      label="中文名"
-	      width="120">
+	      prop="name"
+	      label="名称"
+	      width="">
 	    </el-table-column>
 	    <el-table-column
-	      prop="nameEN"
-	      label="英文名"
-	       width="150">
+	      prop="tell"
+	      label="电话"
+	       width="">
 	    </el-table-column>
 	    <el-table-column
-	      prop="type"
-	      label="类型"
-	       width="120">
+	      prop="addr"
+	      label="地址"
+	       width="">
 	    </el-table-column>
 		 <el-table-column
-	      prop="country"
-	      label="国家/地区"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="min"
-	      label="片长(分钟)"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="showTime"
-	      label="上映时间"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="showPlace"
-	      label="上映地区"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="scoreUser"
-	      label="用户评分"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="scorePro"
-	      label="专业评分"
-	      width="120">
-	    </el-table-column>
-		 <el-table-column
-	      prop="wantSee"
-	      label="想看"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="director"
-	      label="导演"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="actors"
-	      label="演员"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
 	      prop="getMoney"
-	      label="票房"
-	      width="120">
+	      label="余票"
+	      width="">
 	    </el-table-column>
-		 <el-table-column
-	      prop="story"
-	      label="剧情简介"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="imgs"
-	      label="图集"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="firstImg"
-	      label="首页图片"
-	      width="120">
-	    </el-table-column>
-
 	    <el-table-column
 	      fixed="right"
 	      label="操作"
-	      width="120">
+	      width="">
 	      <template scope="scope">
-	        <el-button @click="setMovie" type="text" size="small">修改</el-button>
-	        <el-button type="text"@click="delMovie(scope.$index,scope.row)" size="small">删除</el-button>
+	        <!-- <el-button @click="setMovie" type="text" size="small">修改</el-button> -->
+
+	        <!-- <el-button type="text"@click="delMovie(scope.$index,scope.row)" size="small">删除</el-button> -->
+	        <el-button @click="setMovie" type="text" size="small">新增放映厅</el-button>
 	      </template>
 	    </el-table-column>
 	  </el-table>
@@ -129,7 +70,7 @@ export default {
 		async getMoviePage(page = this.page.curpage, rows = this.page.eachpage) {
 			const {
 				data
-			} = await axios.get("http://localhost:2046/emd/find", {
+			} = await axios.get("http://localhost:2046/movieList/find", {
 				params: {
 					page,
 					rows
@@ -192,26 +133,4 @@ export default {
 	
 	}
 }
-/*const arr = [];
-for(var i = 30; i < 100 ; i++){
-	arr.push({
-    "nameCN" : "战狼222",
-    "nameEN" : "zhanlang2",
-    "type" : "战争,爱情",
-    "country" : "中国"+i,
-    "min" : "120",
-    "showTime" : "2015-09-30",
-    "showPlace" : "大陆上映",
-    "scoreUser" : "9.7",
-    "scorePro" : "4.9",
-    "wantSee" : "60000",
-    "director" : "吴京",
-    "actors" : "张翰，吴京",
-    "getMoney" : "200000000",
-    "story" : "本篇讲述了...",
-    "imgs" : [],
-    "firstImg" : []
-})
-}*/
-// console.log(JSON.stringify(arr))
 </script>
