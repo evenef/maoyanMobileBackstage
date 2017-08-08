@@ -26,7 +26,7 @@
 				</el-menu-item-group>
 				<el-menu-item-group title="排片">
 					<el-menu-item index="8"><i class="el-icon-plus"></i>新增排片</el-menu-item>
-					<el-menu-item index="9"><i class="el-icon-date"></i>排片列表</el-menu-item>
+					<el-menu-item index="setup"><i class="el-icon-date"></i>排片列表</el-menu-item>
 				</el-menu-item-group>
 				</el-menu>
 			</el-col>
