@@ -66,6 +66,7 @@
  <el-table  :data="this.pages.rows"
        v-loading="tabloading"
       style="width: 100%"
+      @selection-change="selsChange"
      
       >
       <el-table-column
@@ -113,9 +114,15 @@
       </template>
     </el-table-column>
     </el-table>
+    <div style="margin-top:10px;float:left;margin-left:40px;">
+      <el-col :span="24" class="toolbar">
+			<el-button type="danger" :disabled="this.sels.length===0" @click="removes">批量删除</el-button>
+			
+		</el-col>
+    </div>
     
     <div class="block" style="
-    margin-top:20px;">
+    margin-top:20px;margin-right:300px; float: right;margin-right:300px;">
     
     <el-pagination
       @size-change="toppage"
@@ -177,6 +184,7 @@ import axios from 'axios'
         tabloading:true,
         tijiaoloading:false,
         editFormVisible:false, //是否显示编辑页面
+        sels:[],//列表选中项
         addFormRules: {
 					acc: [
 						{ required: true, message: '请输入姓名', trigger: 'blur' }
@@ -322,7 +330,7 @@ import axios from 'axios'
                     type: 'success',
                     message:"修改成功"
                   });
-                  this.$refs['editForm'].resetFields();
+                  // this.$refs['editForm'].resetFields();
                   this.editFormVisible = false;
                   this.gerusers();
                 })
@@ -366,6 +374,32 @@ import axios from 'axios'
 					bth: '',
 					tel: ''
 				};
+        },
+        //激活批量删除按钮
+        selsChange(sels){
+          // console.log(sels);
+          this.sels=sels;
+
+        },
+        removes(){
+          var ids=this.sels.map(item=>item._id)
+         
+          this.$confirm('确认删除这些记录吗', '提示', {
+            type: 'warning'
+          }).then(() => {
+            let para = { ids: ids} ;
+            console.log(para)
+            removeUser(para).then((res)=>{
+                    
+                   this.$message({
+                       type:"success",
+                       message:"删除成功"
+                       
+                   });
+                   this.gerusers();
+                })
+
+          })
         }
     }
     }

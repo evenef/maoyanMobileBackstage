@@ -23,9 +23,9 @@
       filter-placement="bottom-end"
         align="center">
         <template scope="scope">
-        <el-tag
-          :type="scope.row.hotOnline === '否' ? 'primary' : 'success'"
-          close-transition style="width:60px;text-align: center;">{{scope.row.hotOnline}}</el-tag>
+        <el-button
+          :type="scope.row.hotOnline === '否' ? 'default' : 'primary'"
+          close-transition style="width:60px;text-align: center;height:30px;line-height: 10px;" @click.native="reying(scope.$index,scope.row)">{{scope.row.hotOnline}}</el-button>
       </template>
       </el-table-column>
       <el-table-column
@@ -37,9 +37,9 @@
       filter-placement="bottom-end"
         align="center">
         <template scope="scope">
-        <el-tag
-          :type="scope.row.soon === '否' ? 'primary' : 'success'"
-          close-transition style="width:60px;text-align: center;">{{scope.row.soon}}</el-tag>
+        <el-button
+          :type="scope.row.soon === '否' ? 'dafault' : 'primary'"
+          close-transition style="width:60px;text-align: center;height:30px;line-height:10px;" @click.native="jijiang(scope.$index,scope.row)">{{scope.row.soon}}</el-button>
       </template>
       </el-table-column>
       <el-table-column
@@ -48,12 +48,13 @@
     
       :filters="[{ text: '是', value: '是' }, { text: '否', value: '否' }]"
       :filter-method="filterTag"
-      width="200"
+     
       filter-placement="bottom-end">
-      <template scope="scope" >
-        <el-tag
-          :type="scope.row.hotShow === '否' ? 'primary' : 'success'"
-          close-transition style="width:60px;text-align: center;">{{scope.row.hotShow}}</el-tag>
+      <template scope="scope"  >
+        <el-button
+       
+          :type="scope.row.hotShow === '否' ? 'default' : 'primary'"
+          close-transition style="width:60px;text-align: center;height:30px;line-height: 10px;" @click.native="zhuangtai(scope.$index,scope.row)"> {{scope.row.hotShow}}</el-button>
       </template>
     </el-table-column>
      
@@ -62,6 +63,7 @@
 </template>
 <script>
 import axios from 'axios'
+const editupdate =params =>{return axios.get('http://localhost:3000/movie/update',{params:params});};
 const chaxun =params=>{return axios.get('http://localhost:3000/movie/find',{params:params});};
 export default {
  data(){
@@ -112,6 +114,57 @@ export default {
       },
       filterTagte(value,row){
            return row.hotOnline === value;
+      },
+      zhuangtai(index,row){
+        // console.log(row.hotShow)
+        if (row.hotShow=="是") {
+           let para={_id:row._id,hotShow:"否"}
+            editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+        }
+        else if(row.hotShow=="否"){
+           let para={_id:row._id,hotShow:"是"}
+            editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+
+        }
+      },
+      reying(index,row){
+          if (row.hotOnline=="是") {
+            let para={_id:row._id,hotOnline:"否"}
+            editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+        }
+        else if(row.hotOnline=="否"){
+            let para={_id:row._id,hotOnline:"是"}
+            editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+
+        }
+
+      },
+      jijiang(index,row){
+        //   console.log(row._id)
+         
+           if (row.soon=="是") {
+            let para={_id:row._id,soon:"否"}
+            console.log(para)
+            editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+        }
+        else if(row.soon=="否"){
+           let para={_id:row._id,soon:"是"}
+           editupdate(para).then((res)=>{
+                this.gerusers();
+            })
+
+        }
+
       }
  }
 }
@@ -124,6 +177,7 @@ td{
 .cell{
     background-color: red;
     
+   
    
     
 }
