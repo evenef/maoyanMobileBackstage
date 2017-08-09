@@ -176,16 +176,7 @@ export default {
   }
   .cell{
     background-color: red;
-<<<<<<< HEAD
   }
-=======
-    
-   
-   
-    
-}
->>>>>>> 08cd858bcda2e8311e257e1ae7bbce28f122f3ac
-
 </style>
 
 
