@@ -16,12 +16,12 @@
 				</el-menu-item-group>
 				<el-menu-item-group title="电影">
 					<el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item>
-					<el-menu-item index="4"><i class="el-icon-document"></i>电影列表</el-menu-item>
+					<el-menu-item index="film"><i class="el-icon-document"></i>电影列表</el-menu-item>
 					<el-menu-item index="Shangying"><i class="el-icon-setting"></i>上映状态</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="影院">
 					<el-menu-item index="6"><i class="el-icon-plus"></i>新增影院</el-menu-item>
-					<el-menu-item index="7"><i class="el-icon-menu"></i>影院列表</el-menu-item>
+					<el-menu-item index="Cinema"><i class="el-icon-menu"></i>影院列表</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="排片">
 					<el-menu-item index="setupAdd"><i class="el-icon-plus"></i>新增排片</el-menu-item>
@@ -44,7 +44,8 @@
 	import SetupAdd from "./setup/setup-add.vue"
 	import Users from "./users/users.vue"
 	import Shangying from "./shangying/shangying.vue"
-
+	import Film from "./FilmMent/movieMent.vue"
+	import Cinema from "./FilmMent/cinema.vue"
 	export default {
 		name: 'app',
 		//状态
@@ -62,7 +63,9 @@
 			Setup,
 			Users,
 			SetupAdd,
-			Shangying
+			Shangying,
+			Film,
+			Cinema
 		}
 	}
 </script>
