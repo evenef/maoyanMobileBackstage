@@ -15,12 +15,12 @@
 					<el-menu-item index="users"><i class="el-icon-star-on"></i>用户管理</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="电影">
-					<el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item>
+					<!-- <el-menu-item index="3"><i class="el-icon-plus"></i>新增电影</el-menu-item> -->
 					<el-menu-item index="film"><i class="el-icon-document"></i>电影列表</el-menu-item>
 					<el-menu-item index="Shangying"><i class="el-icon-setting"></i>上映状态</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="影院">
-					<el-menu-item index="6"><i class="el-icon-plus"></i>新增影院</el-menu-item>
+					<!-- <el-menu-item index="6"><i class="el-icon-plus"></i>新增影院</el-menu-item> -->
 					<el-menu-item index="Cinema"><i class="el-icon-menu"></i>影院列表</el-menu-item>
 				</el-menu-item-group>
 				<el-menu-item-group title="排片">

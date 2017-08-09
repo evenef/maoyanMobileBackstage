@@ -41,7 +41,7 @@
 			async getData(page = this.pages.page, rows = this.pages.rows) {
 				console.log("in")
 				var reg = new RegExp("null")
-                const {data} = await axios.get("http://localhost:3000/testcinema/find",{
+                const {data} = await axios.get("http://localhost:3000/cinema/find",{
                     params:{
                         page,
                         rows

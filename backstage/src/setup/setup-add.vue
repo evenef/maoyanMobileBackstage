@@ -100,9 +100,9 @@
 				</table>
 			</div>
 		</div>
-		<div>
+		<div><!-- 
 			<button @click="show">显示数据</button>
-			<button @click="parseSeat">转化输出</button>
+			<button @click="parseSeat">转化输出</button> -->
 		</div>
 	</div>
 </template>
@@ -158,15 +158,14 @@
 				console.log(this.newScene.startTime.getHours())
 			},
 			async addScene() {
-				console.log(this.newScene)
-				const {data} = await axios.get("http://localhost:3000/testScene/add",{
+				const {data} = await axios.get("http://localhost:3000/scene/add",{
 					params:{
 						...this.newScene
 					}
 				})
 			},
 			async getMoviesData(page = this.moviesPage.page, rows = this.moviesPage.rows) {
-                const {data} = await axios.get("http://localhost:3000/testMovies/find",{
+                const {data} = await axios.get("http://localhost:3000/movie/find",{
                     params:{
                         page,
                         rows,
@@ -189,7 +188,7 @@
                 this.moviesPage.total = data.total
 			},
 			async getCinemasData(page = this.cinemasPage.page, rows = this.cinemasPage.rows) {
-                const {data} = await axios.get("http://localhost:3000/testCinema/find",{
+                const {data} = await axios.get("http://localhost:3000/cinema/find",{
                     params:{
                         page,
                         rows
@@ -203,7 +202,7 @@
                 this.cinemasPage.total = data.total
 			},
 			async getRoomsData() {
-                const {data} = await axios.get("http://localhost:3000/testRooms/find",{
+                const {data} = await axios.get("http://localhost:3000/room/find",{
                     params:{
                     	page: 1,
                     	rows: 1000,
@@ -217,7 +216,6 @@
 			currentItem(val) {
 				this.newScene.movieName = val.nameCN
 				this.newScene.movieId = val._id
-				console.log(this.newScene.movieId)
 			},
 			rowsChange(rows) {
 				this["moviesPage"].rows = rows
@@ -275,7 +273,6 @@
 			getTime() {
 				this.newScene.startTime = `${this.chooseTime.getHours()}:${this.chooseTime.getMinutes()}`
 				this.newScene.date = this.chooseTime.toLocaleDateString()
-				console.log(this.newScene.date)
 			}
 		}
 	}
@@ -285,7 +282,7 @@
 <style scoped>
 	.content {
 		width: 900px;
-		margin: 50px;
+		margin: 20px 100px;
 		margin-bottom: 200px;
 	}
 	.el-table {

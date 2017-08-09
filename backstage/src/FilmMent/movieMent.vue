@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="content">
 		<div class="serch" style="margin: 20px">
 			<el-input v-model="editfiter.acc"  style="width: 200px" placeholder="请输入内容"></el-input>
 			<el-button type="info" icon="search" @click="search_fuc">搜索</el-button>
@@ -49,10 +49,20 @@
 				<el-form-item label="剧情简介" prop="">
 					<el-input v-model="addmovie.store" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
+				<!-- <el-upload
+				  class="upload-demo"
+				  action="https://jsonplaceholder.typicode.com/posts/"
+				  :on-preview="handlePreview"
+				  :on-remove="handleRemove"
+				  :file-list="fileList">
+				  <el-button size="small" type="primary">点击上传</el-button>
+				  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+				</el-upload> -->
+			
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addMovieVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="setMovieInfo" :loading="addLoading">增加</el-button>
+				<el-button type="primary" @click.native="setMovieInfo" >增加</el-button>
 			</div>
 		</el-dialog>
 		<!-- 修改电影 -->
@@ -103,106 +113,76 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="getMovieVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="getMovieInfo" :loading="addLoading">确定</el-button>
+				<el-button type="primary" @click.native="getMovieInfo" >确定</el-button>
 			</div>
 		</el-dialog>
 		<el-table
 	    :data="this.page.data"
-	    stripe
+	    border
 	    style="width: 100%">
 	     <el-table-column
 	      type="selection"
-	      width="55"
-	      >
+	      align="center"
+	      width="50">
 	    </el-table-column>
 	    <el-table-column
 	      prop="nameCN"
 	      label="中文名"
+	      align="center"
 	      width="120">
 	    </el-table-column>
 	    <el-table-column
 	      prop="nameEN"
 	      label="英文名"
+	      align="center"
 	       width="150">
 	    </el-table-column>
 	    <el-table-column
 	      prop="type"
 	      label="类型"
-	       width="120">
+	      align="center"
+	       width="100">
 	    </el-table-column>
 		 <el-table-column
 	      prop="country"
 	      label="国家/地区"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="min"
-	      label="片长(分钟)"
-	      width="120">
+	      align="center"
+	      width="100">
 	    </el-table-column>
 	     <el-table-column
 	      prop="showTime"
 	      label="上映时间"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="showPlace"
-	      label="上映地区"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="scoreUser"
-	      label="用户评分"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="scorePro"
-	      label="专业评分"
-	      width="120">
-	    </el-table-column>
-		 <el-table-column
-	      prop="wantSee"
-	      label="想看"
+	      align="center"
 	      width="120">
 	    </el-table-column>
 	     <el-table-column
 	      prop="director"
 	      label="导演"
+	      align="center"
 	      width="120">
 	    </el-table-column>
 	     <el-table-column
 	      prop="actors"
 	      label="演员"
+	      align="center"
 	      width="120">
 	    </el-table-column>
-	     <el-table-column
-	      prop="getMoney"
-	      label="票房"
-	      width="120">
 	    </el-table-column>
 		 <el-table-column
 	      prop="story"
 	      label="剧情简介"
-	      width="120">
+	      header-align="center"
+	      align="left"
+	      min-width="200">
 	    </el-table-column>
-	     <el-table-column
-	      prop="imgs"
-	      label="图集"
-	      width="120">
-	    </el-table-column>
-	     <el-table-column
-	      prop="firstImg"
-	      label="首页图片"
-	      width="120">
-	    </el-table-column>
-
 	    <el-table-column
 	      fixed="right"
 	      label="操作"
-	      width="120">
+	      align="center"
+	      width="160">
 	      <template scope="scope">
-	        <el-button @click="getMovieFuc(scope.$index,scope.row)" type="text" size="small">修改</el-button>
-	        <el-button type="text"@click="delMovie(scope.$index,scope.row)" size="small">删除</el-button>
+	        <el-button @click="getMovieFuc(scope.$index,scope.row)" type="info" size="small">修改</el-button>
+	        <el-button  type="warning" @click="delMovie(scope.$index,scope.row)" size="small">删除</el-button>
 	      </template>
 	    </el-table-column>
 	  </el-table>
@@ -222,7 +202,10 @@
 import axios from "axios"
 // import router from "../router/router.js"
 import Router from 'vue-router'
-const chaxuns =params=>{return axios.get('http://localhost:2046/movie/find',{params:params});};
+const chaxuns =params=>{return axios.get('http://localhost:3000/movie/find',{params:params});};
+
+const remove = params => { return axios.get("http://localhost:3000/cinema/del", { params: params }); };
+
 export default {
 
 	data(){
@@ -237,6 +220,7 @@ export default {
 			editfiter:{
 				acc:""
 			},
+			fileList:[],
 			addmovie:{
 				nameCN:"",
 				nameEN:"",
@@ -285,21 +269,31 @@ export default {
 		async getMoviePage(page = this.page.curpage, rows = this.page.eachpage) {
 			const {
 				data
-			} = await axios.get("http://localhost:2046/movie/find", {
+			} = await axios.get("http://localhost:3000/movie/find", {
 				params: {
 					page,
 					rows
 				}
 			})
 			this.page = {
-				curpage:data.curpage,
-				eachpage:data.eachpage,
-				maxpage:data.maxpage,
-				count:data.total,
-				data:data.rows
+				curpage: data.curpage,
+				eachpage: data.eachpage,
+				maxpage: data.maxpage,
+				count: data.total,
+				data: data.rows.map((item) => {
+					item.story = item.story.substring(0, 18) + "..."
+					item.actors = item.actors.split(",").map((i) => {
+						return i.split("/")[0]
+					}).join(",").substring(0, 10) + "..."
+					if(item.type.length >= 10)
+						item.type = item.type.substring(0, 10) + "..."
+					if(item.nameEN.length >= 26)
+						item.nameEN = item.nameEN.substring(0, 26) + "..."
+					if(item.director.length >= 10)
+						item.director = item.director.substring(0, 10) + "..."
+					return item
+				})
 			}
-
-			// console.log(this.page);
 		},
 		handleSizeChange(val) {
 			console.log(this.page.curpage)
@@ -316,6 +310,12 @@ export default {
 				 this.page.eachpage
 		    )
 		},
+		 handleRemove(file, fileList) {
+	        console.log(file);
+	      },
+	      handlePreview(file) {
+	        // console.log(file);
+	      },
 		delMovie(index,row){
 			const movie_Id = row._id;
 			console.log(movie_Id)
@@ -328,7 +328,7 @@ export default {
 	            type: 'success',
 	            message: '删除成功!'
 	          });
-	          axios.get("http://localhost:2046/movie/del", {
+	          axios.get("http://localhost:3000/movie/del", {
 					params: {
 						_id:movie_Id
 					}
@@ -355,22 +355,19 @@ export default {
 			this.addMovieVisible = true
 		},
 		setMovieInfo(){
-			this.addMovieVisible = false
+			console.log(this.addmovie)
+			/*this.addMovieVisible = false
 			 this.$message({
 	          message: '恭喜你，添加成功',
 	          type: 'success'
 	        });
-		   axios.get("http://localhost:2046/movie/add", {
+		   axios.get("http://localhost:3000/movie/add", {
 				params:this.addmovie
 			})
-			this.getMoviePage()
+			this.getMoviePage()*/
 		},
 		getMovieFuc(index,row){
 			this.getMovieVisible = true
-			/*for(var i = 0; i < row.length; i++){
-				this.getmovie[i] = row[i]
-			}
-			console.log(this.getmovie)*/
 			this.getmovie.nameCN = row.nameCN
 			this.getmovie.nameEN = row.nameEN
 			this.getmovie.type = row.type
@@ -393,7 +390,7 @@ export default {
 	          type: 'success'
 	        });
 			this.getMovieVisible = false
-			axios.get("http://localhost:2046/movie/update", {
+			axios.get("http://localhost:3000/movie/update", {
 				params: {
 					_id:this.getmovie._id,
 					nameCN:this.getmovie.nameCN,
@@ -417,16 +414,6 @@ export default {
 	
 	}
 }
-/*const arr = [];
-for(var i = 30; i < 50 ; i++){
-	arr.push({
-     name:"金牛万达"+i,
-     // rooms:[],
-     addrs:"金牛万达金牛总督府一号",
-     tell:"123232323232",
-     site:"www.baidu.com"
-
-})
-}
-console.log(JSON.stringify(arr))*/
 </script>
+<style scoped>
+</style>
