@@ -370,12 +370,5 @@ import axios from 'axios'
     }
     }
 </script>
-<<<<<<< HEAD
-<style>
-=======
-<style scope>
->>>>>>> 框架搭建
-*{
-   
-}
+<style scoped>
 </style>

@@ -71,21 +71,20 @@
 </script>
 
 <style scope>
-* {
-	margin: 0;
-	font-family: "微软雅黑";
-}
-h1 {
-	text-align: center;
-	padding: 20px 0;
-	color: #fff;
-	letter-spacing: 10px;
-}
-.banner {
-	background-color: #58B7FF;
-}
-.content {
-	/*height: 200px;*/
-	/*border: 1px solid #000;*/
-}
+	* {
+		margin: 0;
+		font-family: "微软雅黑";
+	}
+	h1 {
+		text-align: center;
+		padding: 20px 0;
+		color: #fff;
+		letter-spacing: 10px;
+	}
+	.banner {
+		background-color: #58B7FF;
+	}
+	.el-table__row {
+		cursor: pointer;
+	}
 </style>

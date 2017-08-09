@@ -1,13 +1,14 @@
 <template>
 	<div class="content">
-		<span>选择电影：</span>
+		<span>电　影：</span>
 		<el-input
-			placeholder="电影名称..."
+			:placeholder="this.newScene.movieName ? this.newScene.movieName : '搜索电影...'"
 			icon="search"
 			v-model="searchMovieName"
 			:on-icon-click="getMoviesData"
 			@change="getMoviesData">
 		</el-input>
+		<el-button class="saveBtn" type="primary" @click="addScene">保存</el-button>
 		<el-table :data="moviesPage.dataArr" highlight-current-row border @current-change="currentItem">
 			<el-table-column prop="nameCN" label="名称" width="200" align="center">
 			</el-table-column>
@@ -15,7 +16,7 @@
 			</el-table-column>
 			<el-table-column prop="country" label="地区" width="120" align="center" header-align="center">
 			</el-table-column>
-			<el-table-column prop="showTime" label="上映时间" width="120" align="center">
+			<el-table-column prop="startTime" label="上映时间" width="120" align="center">
 			</el-table-column>
 			<el-table-column prop="story" label="剧情简介" min-width="300" align="left" header-align="center">
 			</el-table-column>
@@ -32,48 +33,77 @@
 			</el-pagination>
 		</div>
 		<div style="margin-top:50px;"></div>
-		<span>请选择院线：</span>
-		<el-dropdown trigger="click">
-			<el-button type="default">
-				{{this.chooseCinemaName ? this.chooseCinemaName : "- 选择影院 -"}}<i class="el-icon-caret-bottom el-icon--right"></i>
-			</el-button>
-			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item v-for="(item, index) in this.cinemasPage.dataArr" key="{{item._id}}">
-					<div @click="chooseCinemaCl(item)">{{item.name}}</div>
-				</el-dropdown-item>
-				<div class="block">
-					<el-pagination
-						@size-change="rowsChangeCinema"
-						@current-change="pageChangeCinema"
-						:current-page="cinemasPage.page"
-						:page-size="cinemasPage.rows"
-						:total="cinemasPage.total"
-						layout="prev, pager, next, jumper">
-					</el-pagination>
-				</div>
-			</el-dropdown-menu>
-		</el-dropdown>
-		<el-dropdown trigger="click">
-			<el-button type="default">
-				{{this.chooseRoomName ? this.chooseRoomName : "- 选择放映厅 -"}}<i class="el-icon-caret-bottom el-icon--right"></i>
-			</el-button>
-			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item v-for="(item, index) in this.roomsPage.dataArr" key="{{item._id}}">
-					<div @click="chooseRoomCl(item)">{{item.name}}</div>
-				</el-dropdown-item>
-				<div class="block">
-					<el-pagination
-						@size-change="rowsChangeCinema"
-						@current-change="pageChangeCinema"
-						:current-page="roomsPage.page"
-						:page-size="roomsPage.rows"
-						:total="roomsPage.total"
-						layout="prev, pager, next, jumper">
-					</el-pagination>
-				</div>
-			</el-dropdown-menu>
-		</el-dropdown>
-		<button @click="show">显示数据</button>
+		<div class="ponent ponentLeft">
+			<span>电影院：</span>
+			<el-dropdown trigger="click">
+				<el-button type="default">
+					{{this.newScene.cinemaName ? this.newScene.cinemaName : "- 请选择 -"}}<i class="el-icon-caret-bottom el-icon--right"></i>
+				</el-button>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item v-for="(item, index) in this.cinemasPage.dataArr" key="{{item._id}}">
+						<div @click="chooseCinemaCl(item)">{{item.name}}</div>
+					</el-dropdown-item>
+					<div class="block">
+						<el-pagination
+							@size-change="rowsChangeCinema"
+							@current-change="pageChangeCinema"
+							:current-page="cinemasPage.page"
+							:page-size="cinemasPage.rows"
+							:total="cinemasPage.total"
+							layout="prev, pager, next, jumper">
+						</el-pagination>
+					</div>
+				</el-dropdown-menu>
+			</el-dropdown>
+			<div style="margin-top:30px"></div>
+			<span>放映厅：</span>
+			<el-dropdown trigger="click">
+				<el-button type="default">
+					{{this.newScene.roomName ? this.newScene.roomName : "- 请选择 -"}}<i class="el-icon-caret-bottom el-icon--right"></i>
+				</el-button>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item v-for="(item, index) in this.roomsPage.dataArr" key="{{item._id}}">
+						<div @click="chooseRoomCl(item)">{{item.name}}</div>
+					</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</div>
+		<div class="ponent">
+			<span>时　间：</span>
+			<template>
+				<el-time-picker
+					v-model="chooseTime"
+					format="HH:mm"
+					placeholder="选择 / 输入时间"
+					:picker-options="{
+					selectableRange: ['10:00:00 - 23:59:59']
+					}"
+					@blur="getTime">
+				</el-time-picker>
+			</template>
+			</el-time-select>
+			<div style="margin-top:30px"></div>
+			<span>价　格：</span>
+			<el-input
+				v-model="newScene.price"
+				placeholder="请输入价格"
+			></el-input>
+		</div>
+		<div style="clear: both;padding-top: 30px;">
+			<span>座　位：</span>
+			<div class="seatTab">
+				<table>
+					<tr v-for="(item, index) in seatArr">
+						<td v-for="(i, index) in item" v-bind:class="i"
+						@click="tbCl"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div>
+			<button @click="show">显示数据</button>
+			<button @click="parseSeat">转化输出</button>
+		</div>
 	</div>
 </template>
 
@@ -98,30 +128,42 @@
 					dataArr: []
 				},
 				roomsPage: {
-					page: 1,
-					rows: 5,
-					maxpage: 0,
-					total: 0,
 					dataArr: []
 				},
-				movieId: "",
 				searchMovieName: "",
-				chooseCinemaName: "",
-				chooseRoomsId: [],
-				chooseRoomId: "",
-				chooseRoomName: ""
+				chooseCinemaId: "",
+				seatArr: [],
+				seatStr: "",
+				chooseTime: "",
+				newScene: {
+					movieId: "",
+					movieName: "",
+					cinemaName: "",
+					roomId: "",
+					roomName: "",
+					price: "",
+					date: "",
+					startTime: "",
+					seat: "0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000"
+				}
 			}
 		},
 		created() {
 			this.getMoviesData()
 			this.getCinemasData()
-			this.getRoomsData()
 		},
 		methods: {
 			show(){
-				console.log(this.chooseRoomsId)
-				console.log(this.chooseCinemaName)
-				console.log(this.chooseRoomName)
+				console.log("选取影院： "+this.chooseCinemaId)
+				console.log(this.newScene.startTime.getHours())
+			},
+			async addScene() {
+				console.log(this.newScene)
+				const {data} = await axios.get("http://localhost:3000/testScene/add",{
+					params:{
+						...this.newScene
+					}
+				})
 			},
 			async getMoviesData(page = this.moviesPage.page, rows = this.moviesPage.rows) {
                 const {data} = await axios.get("http://localhost:3000/testMovies/find",{
@@ -160,24 +202,22 @@
                 this.cinemasPage.dataArr = data.rows
                 this.cinemasPage.total = data.total
 			},
-			async getRoomsData(page = this.roomsPage.page, rows = this.roomsPage.rows) {
+			async getRoomsData() {
                 const {data} = await axios.get("http://localhost:3000/testRooms/find",{
                     params:{
+                    	page: 1,
+                    	rows: 1000,
                     	findType:"exact",
-                        _id: this.chooseRoomsId[0]
+                        cinemaId: this.chooseCinemaId
                     }
                 })
-                console.log(data)
 
-                this.roomsPage.page = data.curpage
-                this.roomsPage.rows = data.eachpage
-                this.roomsPage.maxpage = data.maxpage
                 this.roomsPage.dataArr = data.rows
-                this.roomsPage.total = data.total
 			},
 			currentItem(val) {
-				this.movieId = val._id
-				console.log(this.movieId)
+				this.newScene.movieName = val.nameCN
+				this.newScene.movieId = val._id
+				console.log(this.newScene.movieId)
 			},
 			rowsChange(rows) {
 				this["moviesPage"].rows = rows
@@ -197,50 +237,100 @@
 				this.getCinemasData()
 			},
 			chooseCinemaCl(item) {
-				this.chooseRoomsId = item.rooms
-				this.chooseCinemaName = item.name
+				if(this.chooseCinemaId === item._id)
+					return
+
+				this.seatArr = []
+				this.seatStr = ""
+				this.newScene.roomName = ""
+				this.chooseCinemaId = item._id
+				this.newScene.cinemaName = item.name
+				this.getRoomsData()
 			},
 			//放映厅部分
-			rowsChangeRoom(rows) {
-				this["roomsPage"].rows = rows
-				this.getRoomData()
-			},
-			pageChangeRoom(page) {
-				this["roomsPage"].page = page
-				this.getRoomData()
+			parseSeat(inType, data) {
+				if(inType === "str"){
+					data = data.split("-")
+					data = data.map((item) => {
+						return item.split("")
+					})
+					this.seatArr = data
+				}else if(inType === "arr"){
+					data = data.map((item) => {
+						return item.join("")
+					}).join("-")
+					this.seatStr = data
+				}
 			},
 			chooseRoomCl(item) {
-				this.chooseRoomId = item._id
-				this.chooseRoomName = item.name
+				if(this.newScene.roomId === item._id)
+					return
+				this.newScene.roomId = item._id
+				this.newScene.roomName = item.name
+				this.parseSeat("str", this.newScene.seat)
+			},
+			tbCl() {
+				console.log(event.target)
+			},
+			getTime() {
+				this.newScene.startTime = `${this.chooseTime.getHours()}:${this.chooseTime.getMinutes()}`
+				this.newScene.date = this.chooseTime.toLocaleDateString()
+				console.log(this.newScene.date)
 			}
 		}
 	}
 
 </script>
 
-<style scope>
+<style scoped>
 	.content {
+		width: 900px;
 		margin: 50px;
+		margin-bottom: 200px;
 	}
 	.el-table {
 		width: 900px;
-	}
-	.el-table__row {
-		cursor: pointer;
 	}
 	.el-input {
 		width: 320px;
 		margin-bottom: 10px;
 	}
+	.el-date-editor--time {
+		width: 150px;
+		margin: 0;
+	}
 	.el-button {
-		width: 420px;
+		width: 320px;
 	}
 	.el-button i {
 		float: right;
 	}
 	.el-dropdown-menu {
-		width: 420px;
+		width: 320px;
 		margin: 0;
 		font-size: 14px;
+	}
+	.ponent {
+		float: left;
+	}
+	.ponentLeft {
+		margin-right: 50px;
+	}
+	.seatTab table {
+		margin-left: 120px;
+	}
+	.seatTab td {
+		display: inline-block;
+		width: 14px;
+		height: 14px;
+		border-radius: 4px;
+		border: 1px solid #aaa;
+		background: #fff;
+		margin: 3px;
+		cursor: pointer;
+	}
+	.saveBtn {
+		width: 120px;
+		float: right;
 	}
 </style>

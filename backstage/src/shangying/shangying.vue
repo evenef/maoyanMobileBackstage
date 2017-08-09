@@ -118,15 +118,12 @@ export default {
 </script>
 
 <style scoped>
-td{
+  td{
     color: red;
-}
-.cell{
+  }
+  .cell{
     background-color: red;
-    
-   
-    
-}
+  }
 
 </style>
 

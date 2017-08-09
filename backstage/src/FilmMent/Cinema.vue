@@ -13,10 +13,10 @@
 					<el-input v-model="addForm.acc" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="地址" prop="">
-					<el-input v-model="addForm.addrs" auto-complete="off" style="width:300px;"></el-input>
+					<el-input v-model="addForm.address" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="电话" prop="">
-					<el-input v-model="addForm.tells" auto-complete="off" style="width:300px;"></el-input>
+					<el-input v-model="addForm.tel" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="网址" prop="">
 					<el-input v-model="addForm.sites" auto-complete="off" style="width:300px;"></el-input>
@@ -34,10 +34,10 @@
 					<el-input v-model="editForm.acc" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="地址" prop="">
-					<el-input v-model="editForm.addrs" auto-complete="off" style="width:300px;"></el-input>
+					<el-input v-model="editForm.address" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="电话" prop="">
-					<el-input v-model="editForm.tells" auto-complete="off" style="width:300px;"></el-input>
+					<el-input v-model="editForm.tel" auto-complete="off" style="width:300px;"></el-input>
 				</el-form-item>
 				<el-form-item label="网址" prop="">
 					<el-input v-model="editForm.sites" auto-complete="off" style="width:300px;"></el-input>
@@ -117,12 +117,12 @@
 	      <template scope="scope">{{ scope.row.name }}</template>
 	    </el-table-column>
 	    <el-table-column
-	      prop="addrs"
+	      prop="address"
 	      label="地址"
 	       width="">
 	    </el-table-column>
 	    <el-table-column
-	      prop="tell"
+	      prop="tel"
 	      label="电话"
 	       width="">
 	    </el-table-column>
@@ -169,7 +169,7 @@ export default {
 				curpage: 1,
 				eachpage: 10,
 				maxpage: 0,
-				count:"",
+				count: 0,
 				data: []
 			},
 			filters:{
@@ -187,14 +187,14 @@ export default {
 			addForm: {
 				ids:'',
 				acc: '',
-				addrs: '',
-				tells: '',
+				address: '',
+				tel: '',
 				sites: ''
 				},
 	        editForm: {
 				acc: '',
-				addrs: '',
-				tells: '',
+				address: '',
+				tel: '',
 				sites: ''
 				},
 			addroom:{
@@ -255,8 +255,8 @@ export default {
           this.addFormVisible=true;
           this.addForm.ids = this.multipleSelection[0]._id
           this.addForm.acc = this.multipleSelection[0].name
-          this.addForm.addrs = this.multipleSelection[0].addrs
-          this.addForm.tells = this.multipleSelection[0].tell
+          this.addForm.address = this.multipleSelection[0].address
+          this.addForm.tel = this.multipleSelection[0].tel
           this.addForm.sites = this.multipleSelection[0].site
           console.log(this.addForm)
 		},
@@ -281,7 +281,7 @@ export default {
 			this.addRoomVisible = false	
 			  console.log(this)
 		 console.log(this.Id)
-		   axios.get("http://localhost:2046/playRooms/add", {
+		   axios.get("http://localhost:2046/rooms/add", {
 			params: {
 				name:this.addroom.name,
 				sate:this.addroom.sate,
@@ -293,7 +293,7 @@ export default {
 		async showRoomFuc(index,row) {
 				console.log(row._id)
 				this.showRoomVisible = true
-				const {data} = await axios.get("http://localhost:2046/playRooms/find", {
+				const {data} = await axios.get("http://localhost:2046/rooms/find", {
 					params: {
 						room_Id:row._id
 					}
@@ -314,8 +314,8 @@ export default {
 			axios.get("http://localhost:2046/cinema/add", {
 				params: {
 					name:this.editForm.acc,
-					addrs:this.editForm.addrs,
-					tell:this.editForm.tells,
+					address:this.editForm.address,
+					tel:this.editForm.tel,
 					site:this.editForm.sites
 				}
 			})
@@ -344,8 +344,8 @@ export default {
 				params: {
 					 _id:this.addForm.ids,
 					 name:this.addForm.acc,
-					 addrs:this.addForm.addrs,
-					 tell:this.addForm.tells,
+					 address:this.addForm.address,
+					 tel:this.addForm.tel,
 					 site:this.addForm.sites
 
 				}
@@ -366,7 +366,7 @@ export default {
 		async delplayRoomFuc(index,row){
 			this.updateroomFuc()
 			console.log(row)
-	       const {data}  = await axios.get('http://localhost:2046/playRooms/del',{
+	       const {data}  = await axios.get('http://localhost:2046/rooms/del',{
 	        	params:{
 	        		_id:row._id
 	        	}
@@ -378,7 +378,7 @@ export default {
 		},
 		//加载新的roomplayFuc界面
 		async updateroomFuc(){
-		  const {data}  = await axios.get('http://localhost:2046/playRooms/find',{
+		  const {data}  = await axios.get('http://localhost:2046/rooms/find',{
         	params:{}
          })
 		  console.log(data)
