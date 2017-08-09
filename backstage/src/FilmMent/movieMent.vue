@@ -49,10 +49,20 @@
 				<el-form-item label="剧情简介" prop="">
 					<el-input v-model="addmovie.store" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
+				<!-- <el-upload
+				  class="upload-demo"
+				  action="https://jsonplaceholder.typicode.com/posts/"
+				  :on-preview="handlePreview"
+				  :on-remove="handleRemove"
+				  :file-list="fileList">
+				  <el-button size="small" type="primary">点击上传</el-button>
+				  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+				</el-upload> -->
+			
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addMovieVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="setMovieInfo" :loading="addLoading">增加</el-button>
+				<el-button type="primary" @click.native="setMovieInfo" >增加</el-button>
 			</div>
 		</el-dialog>
 		<!-- 修改电影 -->
@@ -103,7 +113,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="getMovieVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="getMovieInfo" :loading="addLoading">确定</el-button>
+				<el-button type="primary" @click.native="getMovieInfo" >确定</el-button>
 			</div>
 		</el-dialog>
 		<el-table
@@ -199,10 +209,10 @@
 	    <el-table-column
 	      fixed="right"
 	      label="操作"
-	      width="120">
+	      width="140">
 	      <template scope="scope">
-	        <el-button @click="getMovieFuc(scope.$index,scope.row)" type="text" size="small">修改</el-button>
-	        <el-button type="text"@click="delMovie(scope.$index,scope.row)" size="small">删除</el-button>
+	        <el-button @click="getMovieFuc(scope.$index,scope.row)" type="info" size="small">修改</el-button>
+	        <el-button  type="danger" @click="delMovie(scope.$index,scope.row)" size="small">删除</el-button>
 	      </template>
 	    </el-table-column>
 	  </el-table>
@@ -223,6 +233,9 @@ import axios from "axios"
 // import router from "../router/router.js"
 import Router from 'vue-router'
 const chaxuns =params=>{return axios.get('http://localhost:2046/movie/find',{params:params});};
+
+const remove = params => { return axios.get("http://localhost:2046/cinema/del", { params: params }); };
+
 export default {
 
 	data(){
@@ -237,6 +250,7 @@ export default {
 			editfiter:{
 				acc:""
 			},
+			fileList:[],
 			addmovie:{
 				nameCN:"",
 				nameEN:"",
@@ -316,6 +330,12 @@ export default {
 				 this.page.eachpage
 		    )
 		},
+		 handleRemove(file, fileList) {
+	        console.log(file);
+	      },
+	      handlePreview(file) {
+	        // console.log(file);
+	      },
 		delMovie(index,row){
 			const movie_Id = row._id;
 			console.log(movie_Id)
@@ -355,7 +375,8 @@ export default {
 			this.addMovieVisible = true
 		},
 		setMovieInfo(){
-			this.addMovieVisible = false
+			console.log(this.addmovie)
+			/*this.addMovieVisible = false
 			 this.$message({
 	          message: '恭喜你，添加成功',
 	          type: 'success'
@@ -363,14 +384,10 @@ export default {
 		   axios.get("http://localhost:2046/movie/add", {
 				params:this.addmovie
 			})
-			this.getMoviePage()
+			this.getMoviePage()*/
 		},
 		getMovieFuc(index,row){
 			this.getMovieVisible = true
-			/*for(var i = 0; i < row.length; i++){
-				this.getmovie[i] = row[i]
-			}
-			console.log(this.getmovie)*/
 			this.getmovie.nameCN = row.nameCN
 			this.getmovie.nameEN = row.nameEN
 			this.getmovie.type = row.type
@@ -417,16 +434,4 @@ export default {
 	
 	}
 }
-/*const arr = [];
-for(var i = 30; i < 50 ; i++){
-	arr.push({
-     name:"金牛万达"+i,
-     // rooms:[],
-     addrs:"金牛万达金牛总督府一号",
-     tell:"123232323232",
-     site:"www.baidu.com"
-
-})
-}
-console.log(JSON.stringify(arr))*/
 </script>
