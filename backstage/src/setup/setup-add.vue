@@ -16,7 +16,7 @@
 			</el-table-column>
 			<el-table-column prop="country" label="地区" width="120" align="center" header-align="center">
 			</el-table-column>
-			<el-table-column prop="startTime" label="上映时间" width="120" align="center">
+			<el-table-column prop="showTime" label="上映时间" width="120" align="center">
 			</el-table-column>
 			<el-table-column prop="story" label="剧情简介" min-width="300" align="left" header-align="center">
 			</el-table-column>
@@ -281,12 +281,16 @@
 
 <style scoped>
 	.content {
-		width: 900px;
-		margin: 20px 100px;
-		margin-bottom: 200px;
+		width: 968px;
+		margin: 30px 30px 200px;
 	}
 	.el-table {
 		width: 900px;
+		margin-left: 68px;
+	}
+	.block {
+		margin-top: 10px;
+		margin-left: 68px;
 	}
 	.el-input {
 		width: 320px;
@@ -314,7 +318,7 @@
 		margin-right: 50px;
 	}
 	.seatTab table {
-		margin-left: 120px;
+		margin-left: 100px;
 	}
 	.seatTab td {
 		display: inline-block;

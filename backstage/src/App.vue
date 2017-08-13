@@ -1,5 +1,5 @@
 <template>
-	<div id="all">
+	<div id="all" style="min-width: 1300px;">
 	<el-row>
 		<el-col :span="24">
 		<div class="grid-content bg-purple-dark">

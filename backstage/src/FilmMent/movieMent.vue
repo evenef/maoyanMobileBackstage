@@ -101,14 +101,14 @@
 				<el-form-item label="导演" prop="">
 					<el-input v-model="getmovie.director" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
-				<el-form-item label="演员" prop="">
-					<el-input v-model="getmovie.actors" auto-complete="off" style="width:400px;"></el-input>
+				<el-form-item label="演员" type="textarea" prop="">
+					<el-input type="textarea" :autosize="{ minRows: 3}" v-model="getmovie.actors" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
 				<el-form-item label="票房" prop="">
 					<el-input v-model="getmovie.getMoney" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
 				<el-form-item label="剧情简介" prop="">
-					<el-input v-model="getmovie.story" auto-complete="off" style="width:400px;"></el-input>
+					<el-input type="textarea" :autosize="{ minRows: 6}" v-model="getmovie.story" auto-complete="off" style="width:400px;"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -196,10 +196,24 @@
 	   :total="this.page.count">
 	 </el-pagination>
 	</div>
-	</template>
-<script>
+</template>
 
-import axios from "axios"
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<!-- *******************JavaScript******************************* -->
+<script>
+	import axios from "axios"
 // import router from "../router/router.js"
 import Router from 'vue-router'
 const chaxuns =params=>{return axios.get('http://localhost:3000/movie/find',{params:params});};
@@ -214,7 +228,7 @@ export default {
 				curpage: 1,
 				eachpage: 10,
 				maxpage: 0,
-				count:"",
+				count: 0,
 				data: []
 			},
 			editfiter:{
@@ -236,25 +250,14 @@ export default {
 				actors:"",
 				getMoney:"",
 				story:"",
+				hascenima: "否",
+				hotOnline: "否",
+				soon: "否",
+				hotShow: "否",
 				imgs:[],
 				firstImg:[]
 			},
 			getmovie:{
-				_id:"",
-				nameCN:"",
-				nameEN:"",
-				type:"",
-				country:"",
-				min:"",
-				showTime:"",
-				showPlace:"",
-				scoreUser:"",
-				scorePro:"",
-				wantSee:"",
-				director:"",
-				actors:"",
-				getMoney:"",
-				story:"",
 				imgs:[],
 				firstImg:[]
 			},
@@ -281,10 +284,12 @@ export default {
 				maxpage: data.maxpage,
 				count: data.total,
 				data: data.rows.map((item) => {
-					item.story = item.story.substring(0, 18) + "..."
-					item.actors = item.actors.split(",").map((i) => {
-						return i.split("/")[0]
-					}).join(",").substring(0, 10) + "..."
+					if(item.story)
+						item.story = item.story.substring(0, 26) + "..."
+					if(item.actors)
+						item.actors = item.actors.split(",").map((i) => {
+							return i.split("/")[0]
+						}).join(",").substring(0, 10) + "..."
 					if(item.type.length >= 10)
 						item.type = item.type.substring(0, 10) + "..."
 					if(item.nameEN.length >= 26)
@@ -295,100 +300,40 @@ export default {
 				})
 			}
 		},
-		handleSizeChange(val) {
-			console.log(this.page.curpage)
-		    console.log(val)
-		    this.getMoviePage(
-		    	this.page.curpage,
-				val
-		    )
-		},
-		handleCurrentChange(val) {
-			console.log(val)
-			   this.getMoviePage(
-		    	 val,
-				 this.page.eachpage
-		    )
-		},
-		 handleRemove(file, fileList) {
-	        console.log(file);
-	      },
-	      handlePreview(file) {
-	        // console.log(file);
-	      },
-		delMovie(index,row){
-			const movie_Id = row._id;
-			console.log(movie_Id)
-			this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-	          confirmButtonText: '确定',
-	          cancelButtonText: '取消',
-	          type: 'warning'
-	        }).then(() => {
-	          this.$message({
-	            type: 'success',
-	            message: '删除成功!'
-	          });
-	          axios.get("http://localhost:3000/movie/del", {
-					params: {
-						_id:movie_Id
-					}
-				})
-				this.getMoviePage()
-	        }).catch(() => {
-	          this.$message({
-	            type: 'info',
-	            message: '已取消删除'
-	          });          
-	        });
-		},
-		search_fuc(){
-			console.log(this.editfiter.acc)
-			 let paras={
-	           nameCN:this.editfiter.acc
-	         };
-	         chaxuns(paras).then((res)=>{
-	         	console.log(res)
-	           this.page.data=res.data
-	         })
-		},
-		addmovieFuc(){
-			this.addMovieVisible = true
-		},
-		setMovieInfo(){
-			console.log(this.addmovie)
-			/*this.addMovieVisible = false
-			 this.$message({
-	          message: '恭喜你，添加成功',
-	          type: 'success'
-	        });
-		   axios.get("http://localhost:3000/movie/add", {
-				params:this.addmovie
+		async changeMovieState(_id) {
+			const {
+				data
+			} = await axios.get("http://localhost:3000/movie/find", {
+				params: {
+					_id
+				}
 			})
-			this.getMoviePage()*/
+			this.getmovie.nameCN = data.nameCN
+			this.getmovie.nameEN = data.nameEN
+			this.getmovie.type = data.type
+			this.getmovie.country = data.country
+			this.getmovie.min = data.min
+			this.getmovie.showTime = data.showTime
+			this.getmovie.showPlace = data.showPlace
+			this.getmovie.scoreUser = data.scoreUser
+			this.getmovie.scorePro = data.scorePro
+			this.getmovie.wantSee = data.wantSee
+			this.getmovie.director = data.director
+			this.getmovie.actors = data.actors
+			this.getmovie.getMoney = data.getMoney
+			this.getmovie.story = data.story
+			this.getmovie._id = data._id
+
+			this.getMovieVisible = true
 		},
 		getMovieFuc(index,row){
-			this.getMovieVisible = true
-			this.getmovie.nameCN = row.nameCN
-			this.getmovie.nameEN = row.nameEN
-			this.getmovie.type = row.type
-			this.getmovie.country = row.country
-			this.getmovie.min = row.min
-			this.getmovie.showTime = row.showTime
-			this.getmovie.showPlace = row.showPlace
-			this.getmovie.scoreUser = row.scoreUser
-			this.getmovie.scorePro = row.scorePro
-			this.getmovie.wantSee = row.wantSee
-			this.getmovie.director = row.director
-			this.getmovie.actors = row.actors
-			this.getmovie.getMoney = row.getMoney
-			this.getmovie.story = row.story
-			this.getmovie._id = row._id
+			this.changeMovieState(row._id)
 		},
 		getMovieInfo(){
 			this.$message({
-	          message: '修改成功',
-	          type: 'success'
-	        });
+				message: '修改成功',
+				type: 'success'
+			});
 			this.getMovieVisible = false
 			axios.get("http://localhost:3000/movie/update", {
 				params: {
@@ -410,8 +355,83 @@ export default {
 				}
 			})
 			this.getMoviePage()
-		}
-	
+		},
+		handleSizeChange(val) {
+			this.getMoviePage(
+				this.page.curpage,
+				val
+				)
+		},
+		handleCurrentChange(val) {
+			this.getMoviePage(
+				val,
+				this.page.eachpage
+				)
+		},
+		handleRemove(file, fileList) {
+			console.log(file);
+		},
+		handlePreview(file) {
+	        // console.log(file);
+	    },
+	    delMovie(index,row){
+	    	const movie_Id = row._id;
+	    	this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+	    		confirmButtonText: '确定',
+	    		cancelButtonText: '取消',
+	    		type: 'warning'
+	    	}).then(() => {
+	    		this.$message({
+	    			type: 'success',
+	    			message: '删除成功!'
+	    		});
+	    		axios.get("http://localhost:3000/movie/del", {
+	    			params: {
+	    				_id:movie_Id
+	    			}
+	    		})
+	    		this.getMoviePage()
+	    	}).catch(() => {
+	    		this.$message({
+	    			type: 'info',
+	    			message: '已取消删除'
+	    		});          
+	    	});
+	    },
+	    search_fuc(){
+	    	let paras={
+	    		nameCN:this.editfiter.acc
+	    	};
+	    	chaxuns(paras).then((res)=>{
+	    		this.page.data=res.data.map((item) => {
+	    			item.story = item.story.substring(0, 26) + "..."
+	    			item.actors = item.actors.split(",").map((i) => {
+	    				return i.split("/")[0]
+	    			}).join(",").substring(0, 10) + "..."
+	    			if(item.type.length >= 10)
+	    				item.type = item.type.substring(0, 10) + "..."
+	    			if(item.nameEN.length >= 26)
+	    				item.nameEN = item.nameEN.substring(0, 26) + "..."
+	    			if(item.director.length >= 10)
+	    				item.director = item.director.substring(0, 10) + "..."
+	    			return item
+	    		})
+	    	})
+	    },
+	    addmovieFuc(){
+	    	this.addMovieVisible = true
+	    },
+	    setMovieInfo(){
+	    	this.addMovieVisible = false
+	    	this.$message({
+	    		message: '添加成功',
+	    		type: 'success'
+	    	});
+	    	axios.get("http://localhost:3000/movie/add", {
+	    		params:this.addmovie
+	    	})
+	    	this.getMoviePage()
+	    }
 	}
 }
 </script>
