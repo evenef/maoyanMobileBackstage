@@ -71,6 +71,13 @@
 		<div class="ponent">
 			<span>时　间：</span>
 			<template>
+				<el-date-picker
+					v-model="chooseDate"
+					type="date"
+					placeholder="选择 / 输入日期"
+					:picker-options="pickerOptions"
+					@blur="getNewTime">
+				</el-date-picker>
 				<el-time-picker
 					v-model="chooseTime"
 					format="HH:mm"
@@ -78,7 +85,7 @@
 					:picker-options="{
 					selectableRange: ['10:00:00 - 23:59:59']
 					}"
-					@blur="getTime">
+					@blur="getNewTime">
 				</el-time-picker>
 			</template>
 			</el-time-select>
@@ -99,10 +106,6 @@
 					</tr>
 				</table>
 			</div>
-		</div>
-		<div><!-- 
-			<button @click="show">显示数据</button>
-			<button @click="parseSeat">转化输出</button> -->
 		</div>
 	</div>
 </template>
@@ -134,7 +137,8 @@
 				chooseCinemaId: "",
 				seatArr: [],
 				seatStr: "",
-				chooseTime: "",
+				chooseDate: new Date,
+				chooseTime: new Date,
 				newScene: {
 					movieId: "",
 					movieName: "",
@@ -145,7 +149,12 @@
 					date: "",
 					startTime: "",
 					seat: "0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000"
-				}
+				},
+				pickerOptions: {
+					disabledDate(time) {
+						return time.getTime() < new Date - 8.64e7;
+					}
+				},
 			}
 		},
 		created() {
@@ -153,18 +162,62 @@
 			this.getCinemasData()
 		},
 		methods: {
-			show(){
-				console.log("选取影院： "+this.chooseCinemaId)
-				console.log(this.newScene.startTime.getHours())
-			},
 			async addScene() {
+				var isAdd = true
+				for(var item in this.newScene){
+					if(!this.newScene[item]){
+						isAdd = false
+						this.$alert('添加信息不完善！', '提示', {
+							confirmButtonText: '去补充'
+						});
+					}
+				}
+				if(!isAdd)
+					return
 				const {data} = await axios.get("http://localhost:3000/scene/add",{
 					params:{
 						...this.newScene
 					}
 				})
+				const h = this.$createElement;
+				this.$notify({
+					title: '✔添加成功',
+					message: h('span', { style: 'color: #aaa'}, `${this.newScene.movieName}，${this.newScene.cinemaName}，${this.newScene.roomName}，${this.newScene.date}，${this.newScene.startTime}，${this.newScene.price}元 （提示消息10秒后自动关闭）`),
+					duration: 10000
+				})
+				await axios.get("http://localhost:3000/movie/update",{
+					params:{
+						_id: this.newScene.movieId,
+						hascenima: "已排片"
+					}
+				})
+				this.chooseCinemaId = ""
+				this.chooseDate = new Date
+				this.chooseTime = new Date
+				this.newScene = {
+					movieId: "",
+					movieName: "",
+					cinemaName: "",
+					roomId: "",
+					roomName: "",
+					price: "",
+					date: "",
+					startTime: "",
+					seat: "0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000"
+				}
 			},
 			async getMoviesData(page = this.moviesPage.page, rows = this.moviesPage.rows) {
+				this.newScene = {
+					movieId: "",
+					movieName: "",
+					cinemaName: "",
+					roomId: "",
+					roomName: "",
+					price: "",
+					date: "",
+					startTime: "",
+					seat: "0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000-0000000000"
+				}
                 const {data} = await axios.get("http://localhost:3000/movie/find",{
                     params:{
                         page,
@@ -270,9 +323,13 @@
 			tbCl() {
 				console.log(event.target)
 			},
-			getTime() {
-				this.newScene.startTime = `${this.chooseTime.getHours()}:${this.chooseTime.getMinutes()}`
-				this.newScene.date = this.chooseTime.toLocaleDateString()
+			getNewTime() {
+				const minute = this.chooseTime.getMinutes().toString()
+				const hour = this.chooseTime.getHours().toString()
+				const month = (this.chooseDate.getMonth() + 1).toString()
+				const day = this.chooseDate.getDate().toString()
+				this.newScene.startTime = `${hour[1] ? hour : '0' + hour}:${minute[1] ? minute : '0' + minute}`
+				this.newScene.date = `${this.chooseDate.getFullYear()}-${month[1] ? month : '0' + month}-${day[1] ? day : '0' + day}`
 			}
 		}
 	}
@@ -296,8 +353,9 @@
 		width: 320px;
 		margin-bottom: 10px;
 	}
-	.el-date-editor--time {
-		width: 150px;
+	.el-date-editor--time,
+	.el-date-editor--date {
+		width: 157px;
 		margin: 0;
 	}
 	.el-button {
