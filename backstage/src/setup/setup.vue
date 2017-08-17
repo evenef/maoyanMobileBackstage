@@ -47,8 +47,8 @@
 			</el-pagination>
 		</div>
 
-		<el-dialog title="放映厅" :visible.sync="showRoomWin" size="large" @close="showScene = 'display: none'">
-			<el-table border :data="roomsArrShow" style="width: 1200px">
+		<el-dialog title="放映厅" :visible.sync="showRoomWin" size="small" @close="showScene = 'display: none'" style="text-align: center;">
+			<el-table border :data="roomsArrShow" style="width: 1200px;margin: auto;">
 				<el-table-column property="name" label="放映厅" min-width="200" align="center"></el-table-column>
 				<el-table-column property="" label="排片" min-width="300" align="center"></el-table-column>
 				<el-table-column label="操作" width="180" align="center">
@@ -60,8 +60,8 @@
 			</el-table>
 			<div class="inWinDiv" :style="showScene">
 			<h2 style="text-align: center;margin-bottom: 10px;"><span style="font-size: 16px;color: #999;">{{roomSceneArr.length ? roomSceneArr[0].cinemaName : ""}} </span>{{roomSceneArr.length ? roomSceneArr[0].roomName : ""}}<span style="font-size: 16px;color: #999;"> {{"《" + chooseMovieName + "》"}}</span></h2>
-				<el-table border :data="roomSceneArr" style="width: 1200px">
-					<el-table-column property="date" label="日期" min-width="" align="center"></el-table-column>
+				<el-table border :data="roomSceneArr" style="width: 1200px;margin: auto;">
+					<el-table-column property="date" label="日期" min-width="100" align="center"></el-table-column>
 					<el-table-column property="startTime" label="时间" min-width="" align="center"></el-table-column>
 					<el-table-column property="price" label="票价" min-width="" align="center"></el-table-column>
 					<el-table-column property="seat" label="座次" min-width="300" align="center"></el-table-column>
@@ -247,6 +247,7 @@
 	.content {
 		width: 960px;
 		margin: 30px 30px 200px;
+		text-align: center;
 	}
 	.moviesTab {
 		min-height: 480px;

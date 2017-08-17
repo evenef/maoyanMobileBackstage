@@ -1,22 +1,22 @@
 <template>
 <div>
   <!--新增界面-->
-<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" size="tiny" v-loading="tijiaoloading">
+<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" size="tiny">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名" prop="acc">
-					<el-input v-model="addForm.acc" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="addForm.acc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="密码">
-			  <el-input v-model="addForm.pwd" auto-complete="off" style="width:400px;"></el-input>
+			  <el-input v-model="addForm.pwd" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="邮箱">
-					<el-input v-model="addForm.email" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="addForm.email" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="生日">
 					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.bth"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="电话">
-					<el-input v-model="addForm.tel" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="addForm.tel" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -28,19 +28,19 @@
     <el-dialog title="编辑" v-model="editFormVisible"  size="tiny">
 			<el-form :model="editForm" label-width="80px" :rules="addFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="acc">
-					<el-input v-model="editForm.acc" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="editForm.acc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="密码">
-			  <el-input v-model="editForm.pwd" auto-complete="off" style="width:400px;"></el-input>
+			  <el-input v-model="editForm.pwd" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="邮箱">
-					<el-input v-model="editForm.email" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="editForm.email" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="生日">
 					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.bth"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="电话">
-					<el-input v-model="editForm.tel" auto-complete="off" style="width:400px;"></el-input>
+					<el-input v-model="editForm.tel" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -56,7 +56,7 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="chaxunuser" icon="search"
-          v-loading.fullscreen.lock="cditloging">查询</el-button>
+          >查询</el-button>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd" icon="plus">新增</el-button>
@@ -64,7 +64,6 @@
 			</el-form>
 		</el-col>
  <el-table  :data="this.pages.rows"
-       v-loading="tabloading"
       style="width: 100%"
       @selection-change="selsChange"
      
@@ -108,8 +107,8 @@
         @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-button  type="text" size="danger" style="width:60px;background-color: red; height: 
         32px;margin-top:5px; margin-left:20px;
-    color: white;"
-         @click="deluser(scope.$index,scope.row)" v-loading="tabloading">删除</el-button>
+        color: white;"
+         @click="deluser(scope.$index,scope.row)">删除</el-button>
         
       </template>
     </el-table-column>
@@ -150,6 +149,7 @@ import axios from 'axios'
     export default{
         data () {
       return {
+        addLoading: false,
         filters:{
           acc:""
         },
@@ -158,7 +158,7 @@ import axios from 'axios'
             page:1,
             maxpage:0,
             total:0,
-            listLoading:true,
+            // listLoading:true,
             eachpage:10,
             data:[]
           },
@@ -218,13 +218,8 @@ import axios from 'axios'
                     total:data.total,
                     curpage:data.curpage,
                     eachpage:data.eachpage,
-                    //  listLoading:false,
+                     // listLoading:false,
                 }
-                
-               
-                 
-                
-                console.log(data)
                 
 
         },
@@ -256,10 +251,10 @@ import axios from 'axios'
             this.$confirm("确定删除记录吗","提示",{
                 type:"warning"
             }).then(()=>{
-                this.listLoading=true;
+                // this.listLoading=true;
                 console.log(row._id)
                 let usersid={_id:row._id}
-                this.tabloading=true;
+                // this.tabloading=true;
                 setTimeout(()=>{
                    this.tabloading=false;
                     this.$message({
@@ -286,7 +281,7 @@ import axios from 'axios'
         //添加数据方法
         addSubmit(){
          
-          this.tijiaoloading=true;
+          // this.tijiaoloading=true;
           this.$refs.addForm.validate((valid)=>{
             if (valid) {
               this.$confirm("确认提交吗？","提示",{}).then(()=>{
